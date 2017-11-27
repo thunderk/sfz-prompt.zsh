@@ -20,7 +20,7 @@ changed by settings `PROMPT_SFZ_CMD_MAX_EXEC_TIME`.
 sfz starts with only 2 characters on the screen:
 
 ```
-~ §
+~ >
 ```
 
 All other information is omitted and shown only when needed.
