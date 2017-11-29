@@ -13,22 +13,22 @@ PROMPT_SFZ_PATH_UNTRUNCATED=${PROMPT_SFZ_PATH_UNTRUNCATED-""}
 # represent actual color.
 sfz_colors () {
     case $1 in
-        grey)     echo "{234}";;
-        bgrey)    echo "{060}";;
-        red)      echo "{126}";;
-        bred)     echo "{200}";;
+        grey)     echo "{240}";;
+        bgrey)    echo "{249}";;
+        red)      echo "{124}";;
+        bred)     echo "{196}";;
         green)    echo "{035}";;
-        bgreen)   echo "{048}";;
-        yellow)   echo "{148}";;
-        byellow)  echo "{190}";;
+        bgreen)   echo "{046}";;
+        yellow)   echo "{184}";;
+        byellow)  echo "{227}";;
         blue)     echo "{025}";;
-        bblue)    echo "{069}";;
+        bblue)    echo "{039}";;
         magenta)  echo "{092}";;
-        bmagenta) echo "{099}";;
+        bmagenta) echo "{105}";;
         cyan)     echo "{074}";;
-        bcyan)    echo "{081}";;
-        white)    echo "{153}";;
-        bwhite)   echo "{195}";;
+        bcyan)    echo "{051}";;
+        white)    echo "{254}";;
+        bwhite)   echo "{255}";;
     esac
 }
 
@@ -122,6 +122,7 @@ sfz_pwd() {
 }
 
 sfz_preexec() {
+    sfz_global_cmd="$2"
     sfz_global_cmd_timestamp=$EPOCHSECONDS
 
     # shows the current dir and executed command in the title when a process is active
@@ -156,7 +157,7 @@ sfz_location() {
 # Get the error result of previous command
 sfz_previous_error() {
     if [[ $sfz_global_previous_result -ne 0 ]]; then
-        local result=$(sfz_color bred "=> %?")
+        local result=$(sfz_color bred "%?")
         sfz_bold "$result"
     fi
 }
@@ -191,7 +192,12 @@ sfz_separator() {
 
 # Get the summary line for previous command and background jobs
 sfz_previous_info() {
-    sfz_separator " " "$(sfz_previous_duration)" "$(sfz_previous_error)" "$(sfz_background_jobs)"
+    local result=$(sfz_separator " " "$(sfz_previous_duration)" "$(sfz_previous_error)")
+    if [[ "$result" != '' ]]; then
+        local arrow="=>"
+        result=$(sfz_separator " " "$(sfz_color grey $sfz_global_cmd)" "$(sfz_color bgrey $arrow)" "$result")
+    fi
+    sfz_separator " " "$result" "$(sfz_background_jobs)"
 }
 
 # Get the information about being inside a virtualenv
