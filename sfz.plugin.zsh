@@ -203,7 +203,9 @@ sfz_previous_info() {
 # Get the information about being inside a virtualenv
 sfz_virtual_env() {
     if [[ "$VIRTUAL_ENV" != '' ]]; then
-        sfz_color byellow "(${VIRTUAL_ENV:t})"
+        sfz_color byellow "(venv)"
+    elif [[ "$NODE_VIRTUAL_ENV" != '' ]]; then
+        sfz_color byellow "(node)"
     elif [[ "$BUILDOUT_ENV" != '' ]]; then
         sfz_color byellow "(buildout)"
     fi
@@ -232,8 +234,10 @@ sfz_precmd() {
     vcs_info
     #rehash
 
-    local prev=$(sfz_previous_info)
-    local base=$(sfz_separator " " "$(sfz_location)" "$(sfz_virtual_env)" "$(sfz_prompt_indicator)")
+    local prev
+    prev=$(sfz_previous_info)
+    local base
+    base=$(sfz_separator " " "$(sfz_location)" "$(sfz_virtual_env)" "$(sfz_prompt_indicator)")
     PROMPT="$(sfz_separator $'\n' "$prev" "$base") "
 
     RPROMPT=" %F$(sfz_colors green)$vcs_info_msg_0_$(sfz_git_dirty)"
